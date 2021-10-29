@@ -3,12 +3,11 @@ package facades;
 import dtos.MovieDTO;
 import dtos.MoviesDTO;
 import entities.Movie;
+import errorhandling.MovieNotFoundException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MovieFacade {
@@ -40,8 +39,42 @@ public class MovieFacade {
         }
     }
 
+    public MovieDTO editMovie(MovieDTO movieDTO) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Movie movie = em.find(Movie.class, movieDTO.getId());
+
+            movie.setYear(movieDTO.getYear());
+            movie.setTitle(movieDTO.getTitle());
+            movie.setImdb(movieDTO.getImdb());
+
+            return new MovieDTO(movie);
+
+        } finally {
+            em.close();
+        }
+    }
+
+    public MovieDTO deleteMovie(int id) throws MovieNotFoundException {
+        EntityManager em = emf.createEntityManager();
+        Movie movie = em.find(Movie.class, id);
+        if (movie == null) {
+            throw new MovieNotFoundException(String.format("Movie with id: (%d) not found", id));
+        } else {
+            try {
+                em.getTransaction().begin();
+                em.remove(movie);
+                em.getTransaction().commit();
+
+                return new MovieDTO(movie);
+
+            } finally {
+                em.close();
+            }
+        }
+    }
+
     public MovieDTO getMovieById(int id) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu");
         EntityManager em = emf.createEntityManager();
         try {
             Movie movie = em.find(Movie.class, id);
@@ -50,7 +83,6 @@ public class MovieFacade {
 
         } finally {
             em.close();
-            emf.close();
         }
     }
 
@@ -67,4 +99,19 @@ public class MovieFacade {
             em.close();
         }
     }
+
+    public Integer getMovieCount() {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            TypedQuery<Integer> query = em.createQuery("SELECT COUNT(m) FROM Movie m", Integer.class);
+            int count = query.getSingleResult();
+            
+            return count;
+
+        } finally {
+            em.close();
+        }
+    }
+
 }

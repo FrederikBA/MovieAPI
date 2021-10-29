@@ -106,7 +106,7 @@ public class MovieFacade {
         try {
             TypedQuery<Integer> query = em.createQuery("SELECT COUNT(m) FROM Movie m", Integer.class);
             int count = query.getSingleResult();
-            
+
             return count;
 
         } finally {

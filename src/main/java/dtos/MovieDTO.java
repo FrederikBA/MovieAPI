@@ -6,20 +6,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovieDTO {
+    private int id;
     private int year;
     private String title;
-    private List<String> actors;
+    private String imdb;
 
     public MovieDTO(Movie m) {
+        this.id = m.getId();
         this.year = m.getYear();
         this.title = m.getTitle();
-        this.actors = m.getActors();
+        this.imdb = m.getImdb();
     }
 
-    public MovieDTO(int year, String title, List<String> actors) {
+    public MovieDTO(int year, String title, String imdb) {
         this.year = year;
         this.title = title;
-        this.actors = actors;
+        this.imdb = imdb;
+    }
+
+    public MovieDTO() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getYear() {
@@ -38,11 +51,11 @@ public class MovieDTO {
         this.title = title;
     }
 
-    public List<String> getActors() {
-        return actors;
+    public String getImdb() {
+        return imdb;
     }
 
-    public void setActors(List<String> actors) {
-        this.actors = actors;
+    public void setImdb(String imdb) {
+        this.imdb = imdb;
     }
 }

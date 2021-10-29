@@ -5,10 +5,6 @@
  */
 package errorhandling;
 
-/**
- *
- * @author jobe
- */
 public class ExceptionDTO {
     private int code;
     private String message;

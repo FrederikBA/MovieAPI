@@ -1,6 +1,7 @@
 package facades;
 
 import dtos.MovieDTO;
+import dtos.MoviesDTO;
 import entities.Movie;
 
 import javax.persistence.EntityManager;
@@ -23,17 +24,19 @@ public class MovieFacade {
         return instance;
     }
 
-    public void createMovie(MovieDTO m) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu");
+    public MovieDTO createMovie(MovieDTO m) {
         EntityManager em = emf.createEntityManager();
+        Movie movie = new Movie(m.getYear(), m.getTitle(), m.getImdb());
 
         try {
             em.getTransaction().begin();
-            em.persist(new Movie(m.getYear(), m.getTitle(), m.getActors()));
+            em.persist(movie);
             em.getTransaction().commit();
+
+            return new MovieDTO(movie);
+
         } finally {
             em.close();
-            emf.close();
         }
     }
 
@@ -44,34 +47,24 @@ public class MovieFacade {
             Movie movie = em.find(Movie.class, id);
 
             return new MovieDTO(movie);
+
         } finally {
             em.close();
             emf.close();
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public List<MovieDTO> getAllMovies() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu");
+    public MoviesDTO getAllMovies() {
         EntityManager em = emf.createEntityManager();
 
         try {
             TypedQuery<Movie> query = em.createQuery("SELECT movie FROM Movie movie", Movie.class);
             List<Movie> movies = query.getResultList();
-            return (List<MovieDTO>) (List<?>) movies;
+
+            return new MoviesDTO(movies);
+
         } finally {
             em.close();
-            emf.close();
         }
-    }
-
-    public List<String> addActors(String a1, String a2, String a3, String a4, String a5) {
-        List<String> actors = new ArrayList<>();
-        actors.add(a1);
-        actors.add(a2);
-        actors.add(a3);
-        actors.add(a4);
-        actors.add(a5);
-        return actors;
     }
 }

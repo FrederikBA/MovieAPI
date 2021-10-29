@@ -1,8 +1,6 @@
 package entities;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Movie {
@@ -12,22 +10,15 @@ public class Movie {
     private Integer id;
     private int year;
     private String title;
-
-    @ElementCollection
-    @CollectionTable(
-            name="actor",
-            joinColumns=@JoinColumn(name="id",referencedColumnName = "id")
-    )
-    @Column(name="actor")
-    List<String> actors = new ArrayList<String>();
+    private String imdb;
 
     public Movie() {
     }
 
-    public Movie(int year, String title, List<String> actors) {
+    public Movie(int year, String title, String imdb) {
         this.year = year;
         this.title = title;
-        this.actors = actors;
+        this.imdb = imdb;
     }
 
     public Integer getId() {
@@ -54,11 +45,11 @@ public class Movie {
         this.title = title;
     }
 
-    public List<String> getActors() {
-        return actors;
+    public String getImdb() {
+        return imdb;
     }
 
-    public void setActors(List<String> actors) {
-        this.actors = actors;
+    public void setImdb(String imdb) {
+        this.imdb = imdb;
     }
 }

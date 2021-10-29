@@ -7,6 +7,7 @@ import utils.EMF_Creator;
 
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 
 @Path("/movie")
 public class MovieResource {
@@ -17,24 +18,22 @@ public class MovieResource {
 
     @Path("/{id}")
     @GET
-    @Produces("application/json")
+    @Produces({MediaType.APPLICATION_JSON})
     public String getMovieById(@PathParam("id") int id) {
         return gson.toJson(facade.getMovieById(id));
     }
 
     @Path("/all")
     @GET
-    @Produces("application/json")
+    @Produces({MediaType.APPLICATION_JSON})
     public String getAllMovies() {
         return gson.toJson(facade.getAllMovies());
     }
 
     @Path("/count")
     @GET
-    @Produces("application/json")
+    @Produces({MediaType.APPLICATION_JSON})
     public String getMovieCount() {
         return gson.toJson(facade.getMovieCount());
     }
-
-
 }

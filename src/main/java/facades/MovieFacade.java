@@ -24,20 +24,24 @@ public class MovieFacade {
         return instance;
     }
 
-    public MovieDTO createMovie(MovieDTO m) {
+    public MovieDTO addMovie(MovieDTO movieDTO) throws InsufficientRatingException {
         EntityManager em = emf.createEntityManager();
-        Movie movie = new Movie(m.getYear(), m.getTitle(), m.getImdb(), m.getRating());
+        if (movieDTO.getRating() < 0 && movieDTO.getRating() > 10) {
+            throw new InsufficientRatingException("Movie Rating must be a value between 0 and 10");
+        } else {
+            Movie movie = new Movie(movieDTO.getYear(), movieDTO.getTitle(), movieDTO.getImdb(), movieDTO.getRating());
 
-        try {
-            em.getTransaction().begin();
-            em.persist(movie);
-            em.getTransaction().commit();
+            try {
+                em.getTransaction().begin();
+                em.persist(movie);
+                em.getTransaction().commit();
 
-            return new MovieDTO(movie);
-
-        } finally {
-            em.close();
+                return new MovieDTO(movie);
+            } finally {
+                em.close();
+            }
         }
+
     }
 
     public MovieDTO editMovie(MovieDTO movieDTO) throws InsufficientRatingException {

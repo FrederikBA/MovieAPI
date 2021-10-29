@@ -10,18 +10,21 @@ public class MovieDTO {
     private int year;
     private String title;
     private String imdb;
+    private double rating;
 
     public MovieDTO(Movie m) {
         this.id = m.getId();
         this.year = m.getYear();
         this.title = m.getTitle();
         this.imdb = m.getImdb();
+        this.rating = m.getRating();
     }
 
-    public MovieDTO(int year, String title, String imdb) {
+    public MovieDTO(int year, String title, String imdb, double rating) {
         this.year = year;
         this.title = title;
         this.imdb = imdb;
+        this.rating = rating;
     }
 
     public MovieDTO() {
@@ -57,5 +60,13 @@ public class MovieDTO {
 
     public void setImdb(String imdb) {
         this.imdb = imdb;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }

@@ -28,4 +28,13 @@ public class MovieResource {
     public String getAllMovies() {
         return gson.toJson(facade.getAllMovies());
     }
+
+    @Path("/count")
+    @GET
+    @Produces("application/json")
+    public String getMovieCount() {
+        return gson.toJson(facade.getMovieCount());
+    }
+
+
 }

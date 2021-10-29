@@ -11,14 +11,16 @@ public class Movie {
     private int year;
     private String title;
     private String imdb;
+    private double rating;
 
     public Movie() {
     }
 
-    public Movie(int year, String title, String imdb) {
+    public Movie(int year, String title, String imdb, double rating) {
         this.year = year;
         this.title = title;
         this.imdb = imdb;
+        this.rating = rating;
     }
 
     public Integer getId() {
@@ -51,5 +53,13 @@ public class Movie {
 
     public void setImdb(String imdb) {
         this.imdb = imdb;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }

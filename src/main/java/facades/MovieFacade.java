@@ -3,6 +3,7 @@ package facades;
 import dtos.MovieDTO;
 import dtos.MoviesDTO;
 import entities.Movie;
+import errorhandling.InsufficientRatingException;
 import errorhandling.MovieNotFoundException;
 
 import javax.persistence.EntityManager;
@@ -25,7 +26,7 @@ public class MovieFacade {
 
     public MovieDTO createMovie(MovieDTO m) {
         EntityManager em = emf.createEntityManager();
-        Movie movie = new Movie(m.getYear(), m.getTitle(), m.getImdb());
+        Movie movie = new Movie(m.getYear(), m.getTitle(), m.getImdb(), m.getRating());
 
         try {
             em.getTransaction().begin();
@@ -39,7 +40,7 @@ public class MovieFacade {
         }
     }
 
-    public MovieDTO editMovie(MovieDTO movieDTO) {
+    public MovieDTO editMovie(MovieDTO movieDTO) throws InsufficientRatingException {
         EntityManager em = emf.createEntityManager();
         try {
             Movie movie = em.find(Movie.class, movieDTO.getId());
@@ -47,7 +48,11 @@ public class MovieFacade {
             movie.setYear(movieDTO.getYear());
             movie.setTitle(movieDTO.getTitle());
             movie.setImdb(movieDTO.getImdb());
-
+            if (movieDTO.getRating() > 0 && movieDTO.getRating() < 10) {
+                movie.setRating(movieDTO.getRating());
+            } else {
+                throw new InsufficientRatingException("Movie Rating must be a value between 0 and 10");
+            }
             return new MovieDTO(movie);
 
         } finally {

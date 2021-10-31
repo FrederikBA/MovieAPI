@@ -1,6 +1,7 @@
 package facades;
 
 import dtos.MovieDTO;
+import errorhandling.InsufficientRatingException;
 import utils.EMF_Creator;
 
 import javax.persistence.EntityManagerFactory;
@@ -8,12 +9,14 @@ import javax.persistence.EntityManagerFactory;
 
 public class MoviePopulator {
 
-    public static void populate() {
+    public static void populate() throws InsufficientRatingException {
         EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
         MovieFacade facade = MovieFacade.getMovieFacade(emf);
+
+        facade.addMovie(new MovieDTO(2021, "TestMovie", "https://www.imdb.com/title/tt1853728/?ref_=nv_sr_srsg_0", 8.4));
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InsufficientRatingException {
         populate();
     }
 }

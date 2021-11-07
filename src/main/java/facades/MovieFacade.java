@@ -26,7 +26,7 @@ public class MovieFacade {
     public MovieDTO addMovie(MovieDTO movieDTO) throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
         if (movieDTO.getRating() > 10 || movieDTO.getRating() < 0) {
-            throw new WebApplicationException("The rating: " + movieDTO.getRating() + " doesn't match the criteria (0 - 10");
+            throw new WebApplicationException("The rating: " + movieDTO.getRating() + " doesn't match the criteria: (0 - 10)");
         } else {
             Movie movie = new Movie(movieDTO.getYear(), movieDTO.getTitle(), movieDTO.getImdb(), movieDTO.getRating());
 
@@ -54,7 +54,7 @@ public class MovieFacade {
             if (movieDTO.getRating() > 10 || movieDTO.getRating() < 0) {
                 movie.setRating(movieDTO.getRating());
             } else {
-                throw new WebApplicationException("The rating: " + movieDTO.getRating() + "doesn't match the criteria (0 - 10");
+                throw new WebApplicationException("The rating: " + movieDTO.getRating() + "doesn't match the criteria: (0 - 10)");
             }
             return new MovieDTO(movie);
 

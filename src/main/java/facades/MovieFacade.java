@@ -3,12 +3,11 @@ package facades;
 import dtos.MovieDTO;
 import dtos.MoviesDTO;
 import entities.Movie;
-import errorhandling.InsufficientRatingException;
-import errorhandling.MovieNotFoundException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.WebApplicationException;
 import java.util.List;
 
 public class MovieFacade {
@@ -24,10 +23,10 @@ public class MovieFacade {
         return instance;
     }
 
-    public MovieDTO addMovie(MovieDTO movieDTO) throws InsufficientRatingException {
+    public MovieDTO addMovie(MovieDTO movieDTO) throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
-        if (movieDTO.getRating() < 0 && movieDTO.getRating() > 10) {
-            throw new InsufficientRatingException("Movie Rating must be a value between 0 and 10");
+        if (movieDTO.getRating() > 10 || movieDTO.getRating() < 0) {
+            throw new WebApplicationException("The rating: " + movieDTO.getRating() + " doesn't match the criteria (0 - 10");
         } else {
             Movie movie = new Movie(movieDTO.getYear(), movieDTO.getTitle(), movieDTO.getImdb(), movieDTO.getRating());
 
@@ -44,7 +43,7 @@ public class MovieFacade {
 
     }
 
-    public MovieDTO editMovie(MovieDTO movieDTO) throws InsufficientRatingException {
+    public MovieDTO editMovie(MovieDTO movieDTO) throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
         try {
             Movie movie = em.find(Movie.class, movieDTO.getId());
@@ -52,10 +51,10 @@ public class MovieFacade {
             movie.setYear(movieDTO.getYear());
             movie.setTitle(movieDTO.getTitle());
             movie.setImdb(movieDTO.getImdb());
-            if (movieDTO.getRating() > 0 && movieDTO.getRating() < 10) {
+            if (movieDTO.getRating() > 10 || movieDTO.getRating() < 0) {
                 movie.setRating(movieDTO.getRating());
             } else {
-                throw new InsufficientRatingException("Movie Rating must be a value between 0 and 10");
+                throw new WebApplicationException("The rating: " + movieDTO.getRating() + "doesn't match the criteria (0 - 10");
             }
             return new MovieDTO(movie);
 
@@ -64,11 +63,11 @@ public class MovieFacade {
         }
     }
 
-    public MovieDTO deleteMovie(int id) throws MovieNotFoundException {
+    public MovieDTO deleteMovie(int id) throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
         Movie movie = em.find(Movie.class, id);
         if (movie == null) {
-            throw new MovieNotFoundException(String.format("Movie with id: (%d) not found", id));
+            throw new WebApplicationException("There's no movie matching the Id");
         } else {
             try {
                 em.getTransaction().begin();

@@ -21,6 +21,7 @@ public class MovieDTO {
     }
 
     public MovieDTO(int year, String title, String imdb, double rating) {
+        this.id = -1;
         this.year = year;
         this.title = title;
         this.imdb = imdb;

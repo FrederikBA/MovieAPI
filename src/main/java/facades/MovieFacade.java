@@ -51,11 +51,16 @@ public class MovieFacade {
             movie.setYear(movieDTO.getYear());
             movie.setTitle(movieDTO.getTitle());
             movie.setImdb(movieDTO.getImdb());
+
+
             if (movieDTO.getRating() > 10 || movieDTO.getRating() < 0) {
-                movie.setRating(movieDTO.getRating());
-            } else {
                 throw new WebApplicationException("The rating: " + movieDTO.getRating() + "doesn't match the criteria: (0 - 10)");
+            } else {
+                movie.setRating(movieDTO.getRating());
             }
+            em.getTransaction().begin();
+            em.persist(movie);
+            em.getTransaction().commit();
             return new MovieDTO(movie);
 
         } finally {

@@ -54,7 +54,7 @@ public class MovieFacade {
 
 
             if (movieDTO.getRating() > 10 || movieDTO.getRating() < 0) {
-                throw new WebApplicationException("The rating: " + movieDTO.getRating() + "doesn't match the criteria: (0 - 10)");
+                throw new WebApplicationException("The rating: " + movieDTO.getRating() + " doesn't match the criteria: (0 - 10)");
             } else {
                 movie.setRating(movieDTO.getRating());
             }

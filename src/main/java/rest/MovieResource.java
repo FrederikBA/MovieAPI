@@ -43,25 +43,25 @@ public class MovieResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String addMovie(String movie) throws WebApplicationException {
         MovieDTO m = gson.fromJson(movie, MovieDTO.class);
-        MovieDTO pNew = facade.addMovie(m);
-        return gson.toJson(pNew);
+        MovieDTO mNew = facade.addMovie(m);
+        return gson.toJson(mNew);
     }
 
     @Path("/{id}")
     @PUT
-    public String editMovie(@PathParam("id") int id, String person) throws WebApplicationException {
-        MovieDTO m = gson.fromJson(person, MovieDTO.class);
+    public String editMovie(@PathParam("id") int id, String movie) throws WebApplicationException {
+        MovieDTO m = gson.fromJson(movie, MovieDTO.class);
         m.setId(id);
-        MovieDTO pEdited = facade.editMovie(m);
-        return gson.toJson(pEdited);
+        MovieDTO mEdited = facade.editMovie(m);
+        return gson.toJson(mEdited);
     }
 
     @DELETE
-    @Path("{id}")
+    @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     public String deleteMovie(@PathParam("id") int id) throws WebApplicationException {
-        MovieDTO pDeleted = facade.deleteMovie(id);
-        return gson.toJson(pDeleted);
+        MovieDTO mDeleted = facade.deleteMovie(id);
+        return gson.toJson(mDeleted);
     }
 }

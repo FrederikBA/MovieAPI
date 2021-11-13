@@ -59,7 +59,7 @@ public class MovieFacade {
                 movie.setRating(movieDTO.getRating());
             }
             em.getTransaction().begin();
-            em.persist(movie);
+            em.merge(movie);
             em.getTransaction().commit();
             return new MovieDTO(movie);
 
